@@ -18,7 +18,7 @@ public class ProfitCount {
         int baseAmount = scannerIntInput();
 
         System.out.println("Podaj ile procent w skali roku");
-        int percent = scannerIntInput();
+        int percent = scannerIntInput(0,100);
 
         System.out.println("Podaj ile miesięcy");
         int months = scannerIntInput();
@@ -41,6 +41,25 @@ public class ProfitCount {
                     isOk = true;
                 } else {
                     System.out.println("Liczba musi być większa od 0, wprowadź jeszcze raz");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Niepoprawny format liczby, wprowadź jeszcze raz");
+            }
+        }
+        return result;
+    }
+
+    private static int scannerIntInput(int min, int max) {
+        Scanner sc = new Scanner(System.in);
+        int result = 0;
+        boolean isOk = false;
+        while (!isOk) {
+            try {
+                result = Integer.parseInt(sc.nextLine());
+                if (result > min && max >= result) {
+                    isOk = true;
+                } else {
+                    System.out.println(new StringBuilder("Liczba musi zawierać się w przedziale ").append(min).append(" - ").append(max).append(", wprowadź jeszcze raz.").toString());
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Niepoprawny format liczby, wprowadź jeszcze raz");
