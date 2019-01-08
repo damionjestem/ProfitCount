@@ -1,15 +1,110 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package profitCount;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * @author Damion
  */
+class BankAccount {
+
+    private String number;
+    private String currency;
+
+    public boolean isCurrencySupport(String currency) {
+        return currency == this.currency;
+    }
+
+    public String getNumber() {
+        return this.number;
+    }
+
+}
+
+class ContactPerson {
+
+    private String name;
+    private String email;
+
+    public String getEmailAddress() {
+        return this.email;
+    }
+}
+
+class Address {
+
+    private String street;
+    private String houseNumber;
+    private String zip;
+    private String city;
+    private String country;
+
+    public String getDataToInvoice() {
+        return street + houseNumber + "\n"
+                + zip + city + "\n"
+                + country;
+    }
+}
+
+class Contractor {
+
+    private String nip;
+    private String name;
+    private ArrayList<BankAccount> bankAccounts;
+    private ArrayList<ContactPerson> contactPeople;
+    private Address address;
+
+    public String getDataToInvoice() {
+        return name + "\n" + address.getDataToInvoice() + "\n" + nip;
+    }
+
+    public void changeAddress(Address address) {
+        this.address = address;
+    }
+
+    public String[] getEmailAddresses() {
+        List<String> emailAddresses = new ArrayList<>();
+        for (ContactPerson person : contactPeople) {
+            emailAddresses.add(person.getEmailAddress());
+        }
+        return emailAddresses.toArray(new String[emailAddresses.size()]);
+    }
+
+    public String getBankAccountNumberForCurrency(String currency) {
+        for (BankAccount bankAccount : bankAccounts) {
+            if (bankAccount.isCurrencySupport(currency)) {
+                return bankAccount.getNumber();
+            }
+        }
+        throw new IllegalStateException(
+        String.format("There is no bank account number for currency: '%s'", currency));
+    }
+
+    public void addBankAccount(BankAccount bankAccount) {
+        this.bankAccounts.add(bankAccount);
+    }
+
+    public void removeBankAccountForSpecificCurrency(String currency) {
+        for (int i = 0; i <= this.bankAccounts.size(); i++) {
+            BankAccount bA = this.bankAccounts.get(i);
+            if (bA.isCurrencySupport(currency)) {
+                this.bankAccounts.remove(i);
+                break;
+            }
+        }
+        throw new IllegalStateException(
+        String.format("There is no bank account number for currency: '%s'", currency));
+    }
+
+    Contractor(String nip, String name, Address address) {
+        this.nip = nip;
+        this.name = name;
+        this.address = address;
+    }
+
+}
+
 public class ProfitCount {
 
     public static void main(String[] args) {
@@ -18,7 +113,7 @@ public class ProfitCount {
         int baseAmount = scannerIntInput();
 
         System.out.println("Podaj ile procent w skali roku");
-        int percent = scannerIntInput(0,100);
+        int percent = scannerIntInput(0, 100);
 
         System.out.println("Podaj ile miesięcy");
         int months = scannerIntInput();
@@ -56,7 +151,7 @@ public class ProfitCount {
         while (!isOk) {
             try {
                 result = Integer.parseInt(sc.nextLine());
-                if (result > min && max >= result) {
+                if (min <= result && result <= max) {
                     isOk = true;
                 } else {
                     System.out.println(new StringBuilder("Liczba musi zawierać się w przedziale ").append(min).append(" - ").append(max).append(", wprowadź jeszcze raz.").toString());
