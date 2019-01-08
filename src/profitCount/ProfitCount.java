@@ -30,6 +30,10 @@ class ContactPerson {
     public String getEmailAddress() {
         return this.email;
     }
+
+    public void getName(String name) {
+        this.name = name;
+    }
 }
 
 class Address {
@@ -58,6 +62,11 @@ class Contractor {
     public String getDataToInvoice() {
         return name + "\n" + address.getDataToInvoice() + "\n" + nip;
     }
+    
+    public void changeData(String nip, String name){
+        this.name = name;
+        this.nip = nip;
+    }
 
     public void changeAddress(Address address) {
         this.address = address;
@@ -78,7 +87,7 @@ class Contractor {
             }
         }
         throw new IllegalStateException(
-        String.format("There is no bank account number for currency: '%s'", currency));
+                String.format("There is no bank account number for currency: '%s'", currency));
     }
 
     public void addBankAccount(BankAccount bankAccount) {
@@ -94,7 +103,7 @@ class Contractor {
             }
         }
         throw new IllegalStateException(
-        String.format("There is no bank account number for currency: '%s'", currency));
+                String.format("There is no bank account number for currency: '%s'", currency));
     }
 
     Contractor(String nip, String name, Address address) {
