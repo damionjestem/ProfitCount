@@ -12,22 +12,18 @@ import java.util.Scanner;
  *
  * @author Damion
  */
-public class BankAccount {
+class MyBankAccount extends BankAccount{
     
-    private String number;
-    private String currency;
+    private static MyBankAccount instance;
+    
     private BigDecimal balance;
-
-    public boolean isCurrencySupport(String currency) {
-        return currency == this.currency;
-    }
-
-    public String getNumber() {
-        return this.number;
-    }
-
+    
     public BigDecimal getBalance() {
         return this.balance;
+    }
+    
+    public void setBalance(BigDecimal balance){
+        this.balance = balance;
     }
 
     public void countProfit() {
@@ -48,10 +44,9 @@ public class BankAccount {
 
         System.out.println(balanceAfterInvestment);
     }
-
     
         //Bottleneck here: BigDecimal balance might be a problem later
-    private static int scannerIntInput() {
+    private int scannerIntInput() {
         Scanner sc = new Scanner(System.in);
         int result = 0;
         boolean isOk = false;
@@ -70,7 +65,7 @@ public class BankAccount {
         return result;
     }
 
-    private static int scannerIntInput(int min, int max) {
+    private int scannerIntInput(int min, int max) {
         Scanner sc = new Scanner(System.in);
         int result = 0;
         boolean isOk = false;
@@ -87,6 +82,34 @@ public class BankAccount {
             }
         }
         return result;
+    }
+    
+    //Singleton lazy init
+    private MyBankAccount(){
+        if (instance != null) {
+            throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
+        }
+    }
+    public static MyBankAccount getInstance(){
+        if (instance == null){
+            instance = new MyBankAccount();
+        }
+        return instance;
+    }
+}
+
+
+public class BankAccount {
+    
+    private String number;
+    private String currency;
+
+    public boolean isCurrencySupport(String currency) {
+        return currency == this.currency;
+    }
+
+    public String getNumber() {
+        return this.number;
     }
 
 }
